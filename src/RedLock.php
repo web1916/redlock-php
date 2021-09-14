@@ -85,10 +85,13 @@ class RedLock
     {
         if (empty($this->instances)) {
             foreach ($this->servers as $server) {
-                list($host, $port, $timeout) = $server;
+                list($host, $port, $timeout, $password) = $server;
                 $redis = new \Redis();
                 $redis->connect($host, $port, $timeout);
 
+                if (!empty($auth)) {
+                    $redis->auth($password);
+                }
                 $this->instances[] = $redis;
             }
         }
